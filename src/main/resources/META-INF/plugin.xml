@@ -1,0 +1,66 @@
+<idea-plugin>
+    <id>com.codearena.codearena-plugin</id>
+    <name>CodeArena</name>
+    <version>1.0.0</version>
+    <vendor email="support@codearena.dev" url="https://codearena.dev">CodeArena Team</vendor>
+
+    <description><![CDATA[
+        <h1>CodeArena: Intent-Aware Debugging Arena</h1>
+        <p>Transform errors into micro-learning challenges.
+        Level up your debugging skills with AI-generated challenges based on your coding intent.</p>
+        <br>
+        <p>Key Features:</p>
+        <ul>
+            <li>Intent Pad for context-aware debugging</li>
+            <li>AI-generated debugging challenges</li>
+            <li>XP and progression system</li>
+            <li>Global and private leaderboards</li>
+            <li>Meta-feedback for skill improvement</li>
+        </ul>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="CodeArena Intent Pad"
+                    anchor="right"
+                    factoryClass="com.codearena.ui.IntentPadToolWindowFactory"/>
+        <toolWindow id="CodeArena Leaderboard"
+                    anchor="bottom"
+                    secondary="true"
+                    factoryClass="com.codearena.ui.LeaderboardToolWindowFactory"/>
+
+        <postStartupActivity
+                implementation="com.codearena.core.CodeArenaProjectComponent"/>
+
+        <errorHandler implementation="com.codearena.core.ErrorDetector"/>
+
+        <applicationConfigurable
+                groupId="tools"
+                displayName="CodeArena"
+                id="codearena.settings"
+                instance="com.codearena.ui.CodeArenaConfigurable"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener class="com.codearena.core.ErrorListener"
+                  topic="com.intellij.openapi.diagnostic.ErrorReportSubmitter"/>
+    </applicationListeners>
+
+    <actions>
+        <action id="CodeArena.ShowIntentPad"
+                class="com.codearena.actions.ShowIntentPadAction"
+                text="Show Intent Pad"
+                description="Open CodeArena Intent Pad">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt I"/>
+        </action>
+
+        <action id="CodeArena.ShowLeaderboard"
+                class="com.codearena.actions.ShowLeaderboardAction"
+                text="Show Leaderboard"
+                description="Open CodeArena Leaderboard">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt L"/>
+        </action>
+    </actions>
+</idea-plugin>
