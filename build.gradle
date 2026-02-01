@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '1.13.3'
+}
+
+group 'com.codearena'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+intellij {
+    version = '2023.2'
+    type = 'IC'
+    plugins = ['com.intellij.java']
+}
+
+patchPluginXml {
+    sinceBuild = '222'
+    untilBuild = '253.*'
+}
+
+tasks.named('buildSearchableOptions') {
+    enabled = false
+}
+
+runIde {
+    systemProperty 'idea.is.internal', 'true'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}

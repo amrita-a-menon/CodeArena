@@ -3,6 +3,7 @@ package com.codearena.core;
 import com.codearena.models.Challenge;
 import com.codearena.models.UserProfile;
 import com.codearena.persistence.UserProgress;
+import com.intellij.openapi.project.Project;
 
 public class ScoringSystem {
     private static final int BASE_CORRECT_XP = 15;
@@ -32,7 +33,7 @@ public class ScoringSystem {
             profile.incrementStreak();
 
             // Check level up
-            checkLevelUp(profile);
+            checkLevelUp(project, profile);
         } else {
             profile.addXp(BASE_WRONG_XP);
             profile.resetStreak();
@@ -41,7 +42,7 @@ public class ScoringSystem {
         UserProgress.saveProfile(project, profile);
     }
 
-    private static void checkLevelUp(UserProfile profile) {
+    private static void checkLevelUp(Project project, UserProfile profile) {
         int[] xpThresholds = {0, 100, 300, 600, 1000, 1500};
         String[] ranks = {
                 "Syntax Survivor",
@@ -56,10 +57,21 @@ public class ScoringSystem {
                 if (!profile.getRank().equals(ranks[i])) {
                     profile.setRank(ranks[i]);
                     // Trigger level-up celebration
-                    showLevelUpNotification(ranks[i]);
+                    showLevelUpNotification(project, ranks[i]);
                 }
                 break;
             }
         }
+    }
+
+    private static void showLevelUpNotification(Project project, String newRank) {
+        com.intellij.notification.Notification notification =
+                new com.intellij.notification.Notification(
+                        "CodeArena",
+                        "🏆 Level Up!",
+                        "Congratulations! You've reached the rank of: " + newRank,
+                        com.intellij.notification.NotificationType.INFORMATION
+                );
+        com.intellij.notification.Notifications.Bus.notify(notification, project);
     }
 }
