@@ -50,12 +50,19 @@ public class OpenAIAdapter implements AIAdapter {
 
             if (response.statusCode() == 200) {
                 var responseJson = objectMapper.readTree(response.body());
-                return responseJson.get("choices").get(0).get("message").get("content").asText();
+                String content = responseJson.get("choices").get(0).get("message").get("content").asText();
+                System.out.println("CodeArena: OpenAI Response received successfully. Content length: " + content.length());
+                if (content.toLowerCase().contains("mock challenge")) {
+                    System.out.println("CodeArena: WARNING! AI response contains 'mock challenge' string. This might be unexpected if it came from GPT.");
+                }
+                return content;
             } else {
-                System.err.println("OpenAI API error: " + response.statusCode() + " - " + response.body());
+                System.err.println("CodeArena: OpenAI API error: " + response.statusCode() + " - " + response.body());
+                System.err.println("CodeArena: Falling back to MockAIAdapter internal generate.");
                 return new MockAIAdapter().generate(prompt);
             }
         } catch (Exception e) {
+            System.err.println("CodeArena: Exception during OpenAI call: " + e.getMessage());
             e.printStackTrace();
             return new MockAIAdapter().generate(prompt);
         }
@@ -63,8 +70,12 @@ public class OpenAIAdapter implements AIAdapter {
 
     @Override
     public boolean isAvailable() {
-        String apiKey = SettingsManager.getOpenAIKey();
-        return apiKey != null && !apiKey.isEmpty();
+        try {
+            String apiKey = SettingsManager.getOpenAIKey();
+            return apiKey != null && !apiKey.isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

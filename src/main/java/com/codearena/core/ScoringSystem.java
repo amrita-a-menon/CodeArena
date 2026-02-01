@@ -16,8 +16,11 @@ public class ScoringSystem {
                                      boolean usedHint) {
         UserProfile profile = UserProgress.loadProfile(project);
 
+        profile.incrementChallengesCompleted();
+
         if (correct) {
-            int xpGained = BASE_CORRECT_XP;
+            profile.incrementChallengesCorrect();
+            int xpGained = challenge.getXpValue() > 0 ? challenge.getXpValue() : BASE_CORRECT_XP;
 
             // Streak bonus
             if (profile.getCurrentStreak() >= 3) {

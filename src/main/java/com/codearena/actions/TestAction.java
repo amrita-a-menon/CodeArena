@@ -24,6 +24,8 @@ public class TestAction extends AnAction {
         if (newKey != null && !newKey.isEmpty()) {
             SettingsManager.setOpenAIKey(newKey);
             SettingsManager.setAIAdapterType("OPENAI");
+            System.out.println("CodeArena: API Key updated manually via TestAction. Key: ****" + newKey.substring(Math.max(0, newKey.length() - 4)));
+            System.out.println("CodeArena: Adapter type set to OPENAI");
             Messages.showInfoMessage("API Key saved and adapter switched to OPENAI!", "Settings Updated");
         } else {
             String[] options = {"OPENAI", "MOCK"};
@@ -37,6 +39,7 @@ public class TestAction extends AnAction {
             );
             if (choice >= 0) {
                 SettingsManager.setAIAdapterType(options[choice]);
+                System.out.println("CodeArena: Adapter type manually switched to " + options[choice]);
                 Messages.showInfoMessage("Adapter switched to " + options[choice], "Settings Updated");
             }
         }
