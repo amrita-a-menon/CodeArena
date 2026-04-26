@@ -17,5 +17,6 @@ Leaderboard Integration: Introduced a competitive concept to promote consistent 
 Languages: Java/Kotlin
 
 🔧Tools: IntelliJ Platform SDK, Gradle
+
 🤖 AI & Implementation
 Developed via AI-augmented workflow (ChatGPT/Claude), focusing on prompt engineering and the complex integration of the IntelliJ SDK. Our team managed the high-pressure architecture, environment setup, and Git version control to bridge the gap between AI-generated logic and a functional IDE plugin.
